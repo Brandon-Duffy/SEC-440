@@ -1,0 +1,113 @@
+﻿Vyos1:
+set high-availability vrrp group langroup0 address 10.0.5.1/24
+set high-availability vrrp group langroup0 interface 'eth1'
+set high-availability vrrp group langroup0 priority '200'
+set high-availability vrrp group langroup0 vrid '10'
+set high-availability vrrp group optgroup0 address 10.0.6.1/24
+set high-availability vrrp group optgroup0 interface 'eth2'
+set high-availability vrrp group optgroup0 priority '200'
+set high-availability vrrp group optgroup0 vrid '20'
+set high-availability vrrp group wangroup3 address 10.0.17.103/24
+set high-availability vrrp group wangroup3 interface 'eth0'
+set high-availability vrrp group wangroup3 priority '200'
+set high-availability vrrp group wangroup3 vrid '153'
+set interfaces ethernet eth0 address '10.0.17.13/24'
+set interfaces ethernet eth0 description 'WAN'
+set interfaces ethernet eth1 address '10.0.5.2/24'
+set interfaces ethernet eth1 description 'LAN'
+set interfaces ethernet eth2 address '10.0.6.2/24'
+set interfaces ethernet eth2 description 'OPT'
+set nat destination rule 20 description 'HTTP to HA-VRRP'
+set nat destination rule 20 destination address '10.0.17.103'
+set nat destination rule 20 destination port '80'
+set nat destination rule 20 inbound-interface 'eth0'
+set nat destination rule 20 protocol 'tcp'
+set nat destination rule 20 translation address '10.0.6.10'
+set nat destination rule 20 translation port '80'
+set nat destination rule 30 description 'HTTP to Web01'
+set nat destination rule 30 destination port '80'
+set nat destination rule 30 inbound-interface 'eth0'
+set nat destination rule 30 protocol 'tcp'
+set nat destination rule 30 translation address '10.0.5.100'
+set nat destination rule 30 translation port '80'
+set nat source rule 10 description 'NAT - LAN to DMZ'
+set nat source rule 10 outbound-interface 'eth0'
+set nat source rule 10 source address '10.0.5.0/24'
+set nat source rule 10 translation address 'masquerade'
+set nat source rule 20 description 'NAT from OPT'
+set nat source rule 20 outbound-interface 'eth0'
+set nat source rule 20 source address '10.0.6.0/24'
+set nat source rule 20 translation address 'masquerade'
+set protocols static route 0.0.0.0/0 next-hop 10.0.17.2
+set service dns forwarding allow-from '10.0.5.0/24'
+set service dns forwarding allow-from '10.0.6.0/24'
+set service dns forwarding listen-address '10.0.5.1'
+set service dns forwarding listen-address '10.0.5.3'
+set service dns forwarding listen-address '10.0.6.3'
+set service dns forwarding listen-address '10.0.6.1'
+set service dns forwarding system
+set service ssh listen-address '0.0.0.0'
+set system host-name 'vyos01-brandon'
+set system login user vyos authentication encrypted-password 
+set system name-server '10.0.17.2'
+
+
+
+
+
+
+Vyos2
+
+
+
+
+set high-availability vrrp group langroup0 address 10.0.5.1/24
+set high-availability vrrp group langroup0 interface 'eth1'
+set high-availability vrrp group langroup0 priority '100'
+set high-availability vrrp group langroup0 vrid '10'
+set high-availability vrrp group optgroup0 address 10.0.6.1/24
+set high-availability vrrp group optgroup0 interface 'eth2'
+set high-availability vrrp group optgroup0 priority '100'
+set high-availability vrrp group optgroup0 vrid '20'
+set high-availability vrrp group wangroup3 address 10.0.17.103/24
+set high-availability vrrp group wangroup3 interface 'eth0'
+set high-availability vrrp group wangroup3 priority '100'
+set high-availability vrrp group wangroup3 vrid '153'
+set interfaces ethernet eth0 address '10.0.17.73/24'
+set interfaces ethernet eth0 description 'WAN'
+set interfaces ethernet eth1 address '10.0.5.3/24'
+set interfaces ethernet eth1 description 'LAN'
+set interfaces ethernet eth2 description 'OPT'
+set nat destination rule 20 description 'HTTP to HA-VRRP'
+set nat destination rule 20 destination address '10.0.17.103'
+set nat destination rule 20 destination port '80'
+set nat destination rule 20 inbound-interface 'eth0'
+set nat destination rule 20 protocol 'tcp'
+set nat destination rule 20 translation address '10.0.6.10'
+set nat destination rule 20 translation port '80'
+set nat destination rule 30 description 'HTTP to Web01'
+set nat destination rule 30 destination port '80'
+set nat destination rule 30 inbound-interface 'eth0'
+set nat destination rule 30 protocol 'tcp'
+set nat destination rule 30 translation address '10.0.5.100'
+set nat destination rule 30 translation port '80'
+set nat source rule 10 description 'NAT - LAN to WAN'
+set nat source rule 10 outbound-interface 'eth0'
+set nat source rule 10 source address '10.0.5.0/24'
+set nat source rule 10 translation address 'masquerade'
+set nat source rule 20 description 'NAT from OPT'
+set nat source rule 20 outbound-interface 'eth0'
+set nat source rule 20 source address '10.0.6.0/24'
+set nat source rule 20 translation address 'masquerade'
+set protocols static route 0.0.0.0/24 next-hop 10.0.17.2
+set service dns forwarding allow-from '10.0.5.0/24'
+set service dns forwarding allow-from '10.0.6.0/24'
+set service dns forwarding listen-address '10.0.5.1'
+set service dns forwarding listen-address '10.0.5.3'
+set service dns forwarding listen-address '10.0.6.1'
+set service dns forwarding listen-address '10.0.6.3'
+set service dns forwarding system
+set service ssh listen-address '0.0.0.0'
+set system host-name 'vyos02-brandon'
+set system login user vyos authentication encrypted-password
+set system name-server '10.0.17.2'
