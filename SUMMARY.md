@@ -2,4 +2,4 @@
 
 * [Project 1 - Network Redundancy](README.md)
 * [Project 2 - Web Redundancy](project-2-web-redundancy.md)
-* [Page 1](page-1.md)
+* [Project 3 - Application Redundancy](project-3-application-redundancy.md)
